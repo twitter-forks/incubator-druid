@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
+import { render } from '@testing-library/react';
 import React from 'react';
-import { render } from 'react-testing-library';
 
 import { ColumnMetadata } from '../../../utils/column-metadata';
 
@@ -27,6 +27,13 @@ describe('column tree', () => {
   it('matches snapshot', () => {
     const columnTree = (
       <ColumnTree
+        queryAst={() => undefined}
+        hasGroupBy={() => false}
+        clear={() => null}
+        addFunctionToGroupBy={() => null}
+        filterByRow={() => null}
+        addAggregateColumn={() => null}
+        addToGroupBy={() => null}
         columnMetadataLoading={false}
         columnMetadata={
           [
@@ -50,7 +57,7 @@ describe('column tree', () => {
             },
           ] as ColumnMetadata[]
         }
-        onQueryStringChange={() => null}
+        onQueryStringChange={() => {}}
       />
     );
 
