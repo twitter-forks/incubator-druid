@@ -199,6 +199,8 @@
         <module>extensions-contrib/aliyun-oss-extensions</module>
         <module>extensions-contrib/prometheus-emitter</module>
         <module>extensions-contrib/opentelemetry-emitter</module>
+        <!-- Twitter-specific extensions -->
+        <module>extensions-twitter/scribe-emitter</module>
         <!-- distribution packaging -->
         <module>distribution</module>
     </modules>
