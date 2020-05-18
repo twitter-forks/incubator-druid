@@ -28,6 +28,9 @@ public class ScribeEmitterConfig
   private final String requestLogScribeCategory;
 
   @JsonProperty
+  private final String adminLogScribeCategory;
+
+  @JsonProperty
   private final String role;
 
   @JsonProperty
@@ -57,6 +60,9 @@ public class ScribeEmitterConfig
     if (!getRequestLogScribeCategory().equals(that.getRequestLogScribeCategory())) {
       return false;
     }
+    if (!getAdminLogScribeCategory().equals(that.getAdminLogScribeCategory())) {
+      return false;
+    }
     if (!getRole().equals(that.getRole())) {
       return false;
     }
@@ -79,6 +85,7 @@ public class ScribeEmitterConfig
   public int hashCode()
   {
     int result = getRequestLogScribeCategory().hashCode();
+    result = 31 * result + getAdminLogScribeCategory().hashCode();
     result = 31 * result + getRole().hashCode();
     result = 31 * result + getEnvironment().hashCode();
     result = 31 * result + getDruidVersion().hashCode();
@@ -90,6 +97,7 @@ public class ScribeEmitterConfig
   @JsonCreator
   public ScribeEmitterConfig(
       @JsonProperty("requestLogScribeCategory") String requestLogScribeCategory,
+      @JsonProperty("adminLogScribeCategory") String adminLogScribeCategory,
       @JsonProperty("role") String role,
       @JsonProperty("environment") String environment,
       @JsonProperty("druidVersion") String druidVersion,
@@ -98,6 +106,7 @@ public class ScribeEmitterConfig
   )
   {
     this.requestLogScribeCategory = requestLogScribeCategory;
+    this.adminLogScribeCategory = adminLogScribeCategory;
     this.role = role;
     this.environment = environment;
     this.druidVersion = druidVersion;
@@ -109,6 +118,12 @@ public class ScribeEmitterConfig
   public String getRequestLogScribeCategory()
   {
     return requestLogScribeCategory;
+  }
+
+  @JsonProperty
+  public String getAdminLogScribeCategory()
+  {
+    return adminLogScribeCategory;
   }
 
   @JsonProperty

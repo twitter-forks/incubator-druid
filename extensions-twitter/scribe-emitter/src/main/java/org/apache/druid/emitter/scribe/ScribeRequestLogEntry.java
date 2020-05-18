@@ -163,38 +163,34 @@ public class ScribeRequestLogEntry
   @Override
   public String toString()
   {
-    String resultString = "";
+    return "native_query_id: " + native_query_id + "\n"
+            + "sql_query_id: " + sql_query_id + "\n"
+            + "role: " + role + "\n"
+            + "druid_version: " + druid_version + "\n"
+            + "environment: " + environment + "\n"
+            + "datacenter: " + dataCenter + "\n"
+            + "cluster_name: " + cluster_name + "\n"
+            + "service_name: " + service_name + "\n"
+            + "host: " + host + "\n"
+            + "remote_address: " + remote_address + "\n"
+            + "is_sql_query: " + is_sql_query + "\n"
+            + "query: " + query + "\n"
+            + "datasource: " + datasource + "\n"
 
-    resultString += "native_query_id: " + native_query_id + "\n";
-    resultString += "sql_query_id: " + sql_query_id + "\n";
-    resultString += "role: " + role + "\n";
-    resultString += "druid_version: " + druid_version + "\n";
-    resultString += "environment: " + environment + "\n";
-    resultString += "datacenter: " + dataCenter + "\n";
-    resultString += "cluster_name: " + cluster_name + "\n";
-    resultString += "service_name: " + service_name + "\n";
-    resultString += "host: " + host + "\n";
-    resultString += "remote_address: " + remote_address + "\n";
-    resultString += "is_sql_query: " + is_sql_query + "\n";
-    resultString += "query: " + query + "\n";
-    resultString += "datasource: " + datasource + "\n";
+            + "success: " + success + "\n"
+            + "creation_time: " + creation_time + "\n"
+            + "execution_time: " + execution_time + "\n"
+            + "output_result_size: " + output_result_size + "\n"
+            + "authenticator: " + authenticator + "\n"
+            + "stats: " + stats + "\n"
 
-    resultString += "success: " + success + "\n";
-    resultString += "creation_time: " + creation_time + "\n";
-    resultString += "execution_time: " + execution_time + "\n";
-    resultString += "output_result_size: " + output_result_size + "\n";
-    resultString += "authenticator: " + authenticator + "\n";
-    resultString += "stats: " + stats + "\n";
-
-    resultString += "imply_data_cube: " + imply_data_cube + "\n";
-    resultString += "imply_feature: " + imply_feature + "\n";
-    resultString += "imply_user: " + imply_user + "\n";
-    resultString += "imply_user_email: " + imply_user_email + "\n";
-    resultString += "imply_view: " + imply_view + "\n";
-    resultString += "imply_view_title: " + imply_view_title + "\n";
-    resultString += "imply_priority: " + imply_priority + "\n";
-
-    return resultString;
+            + "imply_data_cube: " + imply_data_cube + "\n"
+            + "imply_feature: " + imply_feature + "\n"
+            + "imply_user: " + imply_user + "\n"
+            + "imply_user_email: " + imply_user_email + "\n"
+            + "imply_view: " + imply_view + "\n"
+            + "imply_view_title: " + imply_view_title + "\n"
+            + "imply_priority: " + imply_priority + "\n";
   }
 
   public static ScribeRequestLogEntry createScribeRequestLogEntry(Event event, ScribeEmitterConfig config, ObjectMapper jsonMapper) throws JsonProcessingException
