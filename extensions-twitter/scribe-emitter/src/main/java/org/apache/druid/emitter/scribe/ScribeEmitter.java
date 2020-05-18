@@ -24,16 +24,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.druid.java.util.common.logger.Logger;
 import org.apache.druid.java.util.emitter.core.Emitter;
 import org.apache.druid.java.util.emitter.core.Event;
+import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.apache.druid.server.log.RequestLogEvent;
 import org.apache.thrift.TException;
 
 public class ScribeEmitter implements Emitter
 {
+  private static final String ADMIN_CONFIG = "config/audit";
+
   private ObjectMapper jsonMapper;
 
   private static Logger log = new Logger(ScribeEmitter.class);
 
   private final TwitterLogScriber requestLogScriber;
+  private final TwitterLogScriber adminLogScriber;
   private final ScribeEmitterConfig scribeEmitterConfig;
 
   public ScribeEmitter(
@@ -42,6 +46,7 @@ public class ScribeEmitter implements Emitter
   )
   {
     this.requestLogScriber = new TwitterLogScriber(scribeEmitterConfig.getRequestLogScribeCategory());
+    this.adminLogScriber = new TwitterLogScriber(scribeEmitterConfig.getAdminLogScribeCategory());
     this.scribeEmitterConfig = scribeEmitterConfig;
     this.jsonMapper = jsonMapper;
   }
@@ -65,6 +70,16 @@ public class ScribeEmitter implements Emitter
       catch (TException e) {
         log.warn("" + e + ", Could not serialize thrift object of query: " + event);
       }
+    } else if (event instanceof ServiceMetricEvent && ((ServiceMetricEvent) event).getMetric().compareTo(ADMIN_CONFIG) == 0) {
+      try {
+        adminLogScriber.scribe(ScribeAdminLogEntry.createScribeAdminLogEntry(event, scribeEmitterConfig, jsonMapper).toThrift());
+      }
+      catch (JsonProcessingException e) {
+        log.warn("" + e + " Could not process administrative string as JSON object " + event);
+      }
+      catch (TException e) {
+        log.warn("" + e + ", Could not serialize thrift object of query: " + event);
+      }
     }
   }
 
@@ -72,11 +87,13 @@ public class ScribeEmitter implements Emitter
   public void flush()
   {
     requestLogScriber.flush();
+    adminLogScriber.flush();
   }
 
   @Override
   public void close()
   {
     requestLogScriber.close();
+    adminLogScriber.close();
   }
 }
