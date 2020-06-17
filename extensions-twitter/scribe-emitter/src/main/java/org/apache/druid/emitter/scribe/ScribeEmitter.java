@@ -31,6 +31,7 @@ import org.apache.thrift.TException;
 public class ScribeEmitter implements Emitter
 {
   private static final String ADMIN_CONFIG = "config/audit";
+  private static final String INDEXING_CONFIG = "task/run/time";
 
   private ObjectMapper jsonMapper;
 
@@ -38,6 +39,7 @@ public class ScribeEmitter implements Emitter
 
   private final TwitterLogScriber requestLogScriber;
   private final TwitterLogScriber adminLogScriber;
+  private final TwitterLogScriber indexingLogScriber;
   private final ScribeEmitterConfig scribeEmitterConfig;
 
   public ScribeEmitter(
@@ -47,6 +49,7 @@ public class ScribeEmitter implements Emitter
   {
     this.requestLogScriber = new TwitterLogScriber(scribeEmitterConfig.getRequestLogScribeCategory());
     this.adminLogScriber = new TwitterLogScriber(scribeEmitterConfig.getAdminLogScribeCategory());
+    this.indexingLogScriber = new TwitterLogScriber(scribeEmitterConfig.getIndexingLogScribeCategory());
     this.scribeEmitterConfig = scribeEmitterConfig;
     this.jsonMapper = jsonMapper;
   }
@@ -80,6 +83,13 @@ public class ScribeEmitter implements Emitter
       catch (TException e) {
         log.warn("" + e + ", Could not serialize thrift object of query: " + event);
       }
+    } else if (event instanceof ServiceMetricEvent && ((ServiceMetricEvent) event).getMetric().compareTo(INDEXING_CONFIG) == 0) {
+      try {
+        indexingLogScriber.scribe(ScribeIndexingLogEntry.createScribeIndexingLogEntry(event, scribeEmitterConfig).toThrift());
+      }
+      catch (TException e) {
+        log.warn("" + e + ", Could not serialize thrift object of query: " + event);
+      }
     }
   }
 
@@ -88,6 +98,7 @@ public class ScribeEmitter implements Emitter
   {
     requestLogScriber.flush();
     adminLogScriber.flush();
+    indexingLogScriber.flush();
   }
 
   @Override
@@ -95,5 +106,6 @@ public class ScribeEmitter implements Emitter
   {
     requestLogScriber.close();
     adminLogScriber.close();
+    indexingLogScriber.close();
   }
 }
