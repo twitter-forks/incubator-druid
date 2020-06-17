@@ -31,6 +31,9 @@ public class ScribeEmitterConfig
   private final String adminLogScribeCategory;
 
   @JsonProperty
+  private final String indexingLogScribeCategory;
+
+  @JsonProperty
   private final String role;
 
   @JsonProperty
@@ -63,6 +66,9 @@ public class ScribeEmitterConfig
     if (!getAdminLogScribeCategory().equals(that.getAdminLogScribeCategory())) {
       return false;
     }
+    if (!getIndexingLogScribeCategory().equals(that.getIndexingLogScribeCategory())) {
+      return false;
+    }
     if (!getRole().equals(that.getRole())) {
       return false;
     }
@@ -86,6 +92,7 @@ public class ScribeEmitterConfig
   {
     int result = getRequestLogScribeCategory().hashCode();
     result = 31 * result + getAdminLogScribeCategory().hashCode();
+    result = 31 * result + getIndexingLogScribeCategory().hashCode();
     result = 31 * result + getRole().hashCode();
     result = 31 * result + getEnvironment().hashCode();
     result = 31 * result + getDruidVersion().hashCode();
@@ -98,6 +105,7 @@ public class ScribeEmitterConfig
   public ScribeEmitterConfig(
       @JsonProperty("requestLogScribeCategory") String requestLogScribeCategory,
       @JsonProperty("adminLogScribeCategory") String adminLogScribeCategory,
+      @JsonProperty("indexingLogScribeCategory") String indexingLogScribeCategory,
       @JsonProperty("role") String role,
       @JsonProperty("environment") String environment,
       @JsonProperty("druidVersion") String druidVersion,
@@ -107,6 +115,7 @@ public class ScribeEmitterConfig
   {
     this.requestLogScribeCategory = requestLogScribeCategory;
     this.adminLogScribeCategory = adminLogScribeCategory;
+    this.indexingLogScribeCategory = indexingLogScribeCategory;
     this.role = role;
     this.environment = environment;
     this.druidVersion = druidVersion;
@@ -124,6 +133,12 @@ public class ScribeEmitterConfig
   public String getAdminLogScribeCategory()
   {
     return adminLogScribeCategory;
+  }
+
+  @JsonProperty
+  public String getIndexingLogScribeCategory()
+  {
+    return indexingLogScribeCategory;
   }
 
   @JsonProperty
