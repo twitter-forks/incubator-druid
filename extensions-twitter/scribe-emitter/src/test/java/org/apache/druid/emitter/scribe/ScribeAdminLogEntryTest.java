@@ -41,8 +41,8 @@ public class ScribeAdminLogEntryTest
                                                                   .setDimension("payload", "key:value")
                                                                   .build("config/audit", 1)
                                                                   .build("druid/coordinator", "127.0.0.11"),
-                                                              new ScribeEmitterConfig("druid_request_log", "druid_admin_log", "iq",
-                                                                                                 "test", "0.16.1-tw-0.1", "central-west", "default-devel"),
+                                                              new ScribeEmitterConfig("druid_request_log", "druid_admin_log", "druid_indexing_log",
+                                                                                      "iq", "test", "0.16.1-tw-0.1", "central-west", "default-devel"),
                                                               objectMapper);
     String expectedResult = "audit_key: key1\n" +
         "audit_type: rules\n" +
