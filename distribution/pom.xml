@@ -245,6 +245,8 @@
                                         <argument>org.apache.druid.extensions:druid-ranger-security</argument>
                                         <argument>-c</argument>
                                         <argument>org.apache.druid.extensions.twitter:scribe-emitter</argument>
+                                        <argument>-c</argument>
+                                        <argument>org.apache.druid.extensions.twitter:twitter-thrift-extensions</argument>
                                         <argument>${druid.distribution.pulldeps.opts}</argument>
                                     </arguments>
                                 </configuration>
