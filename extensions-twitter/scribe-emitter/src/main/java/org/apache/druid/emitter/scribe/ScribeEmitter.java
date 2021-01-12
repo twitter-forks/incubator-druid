@@ -26,7 +26,6 @@ import org.apache.druid.java.util.emitter.core.Emitter;
 import org.apache.druid.java.util.emitter.core.Event;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.apache.druid.server.log.RequestLogEvent;
-import org.apache.thrift.TException;
 
 public class ScribeEmitter implements Emitter
 {
@@ -71,8 +70,8 @@ public class ScribeEmitter implements Emitter
       catch (JsonProcessingException e) {
         log.warn("" + e + " Could not process native query string as JSON object " + event);
       }
-      catch (TException e) {
-        log.warn("" + e + ", Could not serialize thrift object of query: " + event);
+      catch (Exception e) {
+        log.warn("" + e + ", Could not emit event: " + event);
       }
     } else if (event instanceof ServiceMetricEvent && ((ServiceMetricEvent) event).getMetric().compareTo(ADMIN_CONFIG) == 0) {
       try {
@@ -81,15 +80,15 @@ public class ScribeEmitter implements Emitter
       catch (JsonProcessingException e) {
         log.warn("" + e + " Could not process administrative string as JSON object " + event);
       }
-      catch (TException e) {
-        log.warn("" + e + ", Could not serialize thrift object of query: " + event);
+      catch (Exception e) {
+        log.warn("" + e + ", Could not emit event: " + event);
       }
     } else if (event instanceof ServiceMetricEvent && ((ServiceMetricEvent) event).getMetric().compareTo(INDEXING_CONFIG) == 0) {
       try {
         indexingLogScriber.scribe(ScribeIndexingLogEntry.createScribeIndexingLogEntry(event, scribeEmitterConfig).toThrift());
       }
-      catch (TException e) {
-        log.warn("" + e + ", Could not serialize thrift object of query: " + event);
+      catch (Exception e) {
+        log.warn("" + e + ", Could not emit event: " + event);
       }
     }
   }

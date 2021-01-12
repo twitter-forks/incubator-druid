@@ -125,7 +125,7 @@
     <dependency>
       <groupId>com.twitter.logpipeline.client</groupId>
       <artifactId>event-publisher-client-lib</artifactId>
-      <version>20201120140052-HEAD-80d50aa</version>
+      <version>20201218140047-HEAD-b0e9a71</version>
       <exclusions>
         <exclusion>
           <groupId>io.grpc</groupId>

@@ -23,9 +23,11 @@ import com.twitter.logpipeline.client.EventPublisherManager;
 import com.twitter.logpipeline.client.common.EventLogMessage;
 import com.twitter.logpipeline.client.common.EventPublisher;
 import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
-import org.apache.thrift.TException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import com.twitter.util.Await;
+import com.twitter.util.Future;
+import org.apache.druid.java.util.common.logger.Logger;
+
+import java.io.IOException;
 
 public class TwitterEventPublisher<T>
 {
@@ -33,35 +35,41 @@ public class TwitterEventPublisher<T>
   private static final String GCP_CREDENTIALS_PATH = "/var/lib/tss/keys/druid-albus/cloud/gcp/dp/shadow.json";
   private EventPublisher<T> publisher;
 
+  private static Logger log = new Logger(TwitterEventPublisher.class);
+
   public TwitterEventPublisher(String scribeCategory, boolean isDatacenterHostGCP)
   {
     if (isDatacenterHostGCP) {
       final String logCategoryName = "projects/" + GCP_ORG_NAME + "/topics/" + scribeCategory;
-      publisher = (EventPublisher<T>) EventPublisherManager.buildGcpLogPipelinePublisher(
-        logCategoryName,
-        EventLogMsgTBinarySerializer.getNewSerializer(),
-        GCP_CREDENTIALS_PATH);
+      try {
+        publisher = (EventPublisher<T>) EventPublisherManager.buildGcpLogPipelinePublisher(
+            logCategoryName,
+            EventLogMsgTBinarySerializer.getNewSerializer(),
+            GCP_CREDENTIALS_PATH);
+      }
+      catch (IOException e) {
+        log.error("Failed to create scribe emitter for" + logCategoryName);
+      }
     } else {
-      publisher = (EventPublisher<T>) EventPublisherManager.buildScribeLogPipelinePublisher(
-        scribeCategory,
-        EventLogMsgTBinarySerializer.getNewSerializer()
-      );
+      try {
+        publisher = (EventPublisher<T>) EventPublisherManager.buildScribeLogPipelinePublisher(
+            scribeCategory,
+            EventLogMsgTBinarySerializer.getNewSerializer());
+      }
+      catch (IOException e) {
+        log.error("Failed to create scribe emitter for" + scribeCategory);
+      }
     }
   }
 
   public void scribe(T thriftMessage)
-      throws TException
+      throws Exception
   {
     // Build Event log message and publish the event asynchronously
     EventLogMessage<T> message = EventLogMessage.buildEventLogMessage(publisher.getLogCategoryName(), thriftMessage);
-    CompletableFuture<String> future = publisher.publish(message);
-    if (future.isCompletedExceptionally()) {
-      try {
-        future.get();
-      }
-      catch (InterruptedException | ExecutionException e) {
-        throw new TException(e);
-      }
+    if (publisher != null) {
+      Future<String> future = publisher.publish(message);
+      Await.result(future);
     }
   }
 }
