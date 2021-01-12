@@ -46,6 +46,9 @@ public class ScribeEmitterConfig
   private final String dataCenter;
 
   @JsonProperty
+  private final String dataCenterHost;
+
+  @JsonProperty
   private final String clusterName;
 
   @Override
@@ -81,6 +84,9 @@ public class ScribeEmitterConfig
     if (!getDataCenter().equals(that.getDataCenter())) {
       return false;
     }
+    if (!getDataCenterHost().equals(that.getDataCenterHost())) {
+      return false;
+    }
     if (!getClusterName().equals(that.getClusterName())) {
       return false;
     }
@@ -97,6 +103,7 @@ public class ScribeEmitterConfig
     result = 31 * result + getEnvironment().hashCode();
     result = 31 * result + getDruidVersion().hashCode();
     result = 31 * result + getDataCenter().hashCode();
+    result = 31 * result + getDataCenterHost().hashCode();
     result = 31 * result + getClusterName().hashCode();
     return result;
   }
@@ -110,6 +117,7 @@ public class ScribeEmitterConfig
       @JsonProperty("environment") String environment,
       @JsonProperty("druidVersion") String druidVersion,
       @JsonProperty("dataCenter") String dataCenter,
+      @JsonProperty("dataCenterHost") String dataCenterHost,
       @JsonProperty("clusterName") String clusterName
   )
   {
@@ -120,6 +128,7 @@ public class ScribeEmitterConfig
     this.environment = environment;
     this.druidVersion = druidVersion;
     this.dataCenter = dataCenter;
+    this.dataCenterHost = dataCenterHost;
     this.clusterName = clusterName;
   }
 
@@ -163,6 +172,12 @@ public class ScribeEmitterConfig
   public String getDataCenter()
   {
     return dataCenter;
+  }
+
+  @JsonProperty
+  public String getDataCenterHost()
+  {
+    return dataCenterHost;
   }
 
   @JsonProperty

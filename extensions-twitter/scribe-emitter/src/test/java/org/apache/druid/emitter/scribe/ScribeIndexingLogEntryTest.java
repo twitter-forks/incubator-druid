@@ -44,7 +44,7 @@ public class ScribeIndexingLogEntryTest
                                                                                            "druid_indexing_log",
                                                                                                              "iq", "test",
                                                                                                       "0.16.1-tw-0.1", "central-west",
-                                                                                                      "default-devel"));
+                                                                                            "onprem", "default-devel"));
     String expectedResult = "task_id: index_kafka_dsname\n" +
         "task_type: index_kafka\n" +
         "datasource: dsname\n" +

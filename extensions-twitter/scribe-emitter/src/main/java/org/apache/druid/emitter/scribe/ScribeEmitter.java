@@ -32,14 +32,15 @@ public class ScribeEmitter implements Emitter
 {
   private static final String ADMIN_CONFIG = "config/audit";
   private static final String INDEXING_CONFIG = "task/run/time";
+  private static final String GCP = "gcp";
 
   private ObjectMapper jsonMapper;
 
   private static Logger log = new Logger(ScribeEmitter.class);
 
-  private final TwitterLogScriber requestLogScriber;
-  private final TwitterLogScriber adminLogScriber;
-  private final TwitterLogScriber indexingLogScriber;
+  private final TwitterEventPublisher<DruidQueryLogEvent> requestLogScriber;
+  private final TwitterEventPublisher<DruidAdminLogEvent> adminLogScriber;
+  private final TwitterEventPublisher<DruidIndexingLogEvent> indexingLogScriber;
   private final ScribeEmitterConfig scribeEmitterConfig;
 
   public ScribeEmitter(
@@ -47,9 +48,9 @@ public class ScribeEmitter implements Emitter
       ObjectMapper jsonMapper
   )
   {
-    this.requestLogScriber = new TwitterLogScriber(scribeEmitterConfig.getRequestLogScribeCategory());
-    this.adminLogScriber = new TwitterLogScriber(scribeEmitterConfig.getAdminLogScribeCategory());
-    this.indexingLogScriber = new TwitterLogScriber(scribeEmitterConfig.getIndexingLogScribeCategory());
+    this.requestLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getRequestLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
+    this.adminLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getAdminLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
+    this.indexingLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getIndexingLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
     this.scribeEmitterConfig = scribeEmitterConfig;
     this.jsonMapper = jsonMapper;
   }
@@ -96,16 +97,15 @@ public class ScribeEmitter implements Emitter
   @Override
   public void flush()
   {
-    requestLogScriber.flush();
-    adminLogScriber.flush();
-    indexingLogScriber.flush();
   }
 
   @Override
   public void close()
   {
-    requestLogScriber.close();
-    adminLogScriber.close();
-    indexingLogScriber.close();
+  }
+
+  private boolean isDatacenterHostGCP(String datacenterHost)
+  {
+    return datacenterHost.compareTo(GCP) == 0;
   }
 }
