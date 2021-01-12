@@ -47,9 +47,9 @@ public class ScribeEmitter implements Emitter
       ObjectMapper jsonMapper
   )
   {
-    this.requestLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getRequestLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
-    this.adminLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getAdminLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
-    this.indexingLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getIndexingLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()));
+    this.requestLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getRequestLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()), scribeEmitterConfig.getGcpOrgName(), scribeEmitterConfig.getGcpCredentialsPath());
+    this.adminLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getAdminLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()), scribeEmitterConfig.getGcpOrgName(), scribeEmitterConfig.getGcpCredentialsPath());
+    this.indexingLogScriber = new TwitterEventPublisher(scribeEmitterConfig.getIndexingLogScribeCategory(), isDatacenterHostGCP(scribeEmitterConfig.getDataCenterHost()), scribeEmitterConfig.getGcpOrgName(), scribeEmitterConfig.getGcpCredentialsPath());
     this.scribeEmitterConfig = scribeEmitterConfig;
     this.jsonMapper = jsonMapper;
   }

@@ -42,7 +42,8 @@ public class ScribeAdminLogEntryTest
                                                                   .build("config/audit", 1)
                                                                   .build("druid/coordinator", "127.0.0.11"),
                                                               new ScribeEmitterConfig("druid_request_log", "druid_admin_log", "druid_indexing_log",
-                                                                                      "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel"),
+                                                                                      "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
+                                                                                      "org-name", "/path/to/credentials"),
                                                               objectMapper);
     String expectedResult = "audit_key: key1\n" +
         "audit_type: rules\n" +

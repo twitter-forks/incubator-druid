@@ -64,7 +64,9 @@ public class ScribeRequestLogEntryTest
     );
     RequestLogEvent event = DefaultRequestLogEventBuilderFactory.instance().createRequestLogEventBuilder("feed", nativeLine).build(ImmutableMap.of("service", "broker", "host", "central-west-1"));
 
-    ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log", "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel"), objectMapper);
+    ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log",
+                                                                                                 "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
+                                                                                                 "org-name", "/path/to/credentials"), objectMapper);
     String expectedResult = "native_query_id: null\n" +
         "sql_query_id: null\n" +
         "role: iq\n" +
@@ -106,7 +108,9 @@ public class ScribeRequestLogEntryTest
     );
     RequestLogEvent event = DefaultRequestLogEventBuilderFactory.instance().createRequestLogEventBuilder("feed", sqlLine).build(ImmutableMap.of("service", "broker", "host", "central-west-1"));
 
-    ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log", "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel"), new ObjectMapper());
+    ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log",
+                                                                                                 "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
+                                                                                                 "org-name", "/path/to/credentials"), new ObjectMapper());
     String expectedResult = "native_query_id: null\n" +
         "sql_query_id: null\n" +
         "role: iq\n" +

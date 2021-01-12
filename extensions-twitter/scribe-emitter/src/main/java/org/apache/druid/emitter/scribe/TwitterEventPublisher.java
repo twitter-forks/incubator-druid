@@ -37,15 +37,15 @@ public class TwitterEventPublisher<T>
 
   private static Logger log = new Logger(TwitterEventPublisher.class);
 
-  public TwitterEventPublisher(String scribeCategory, boolean isDatacenterHostGCP)
+  public TwitterEventPublisher(String scribeCategory, boolean isDatacenterHostGCP, String gcpOrgName, String gcpCredentialsPath)
   {
     if (isDatacenterHostGCP) {
-      final String logCategoryName = "projects/" + GCP_ORG_NAME + "/topics/" + scribeCategory;
+      final String logCategoryName = "projects/" + gcpOrgName + "/topics/" + scribeCategory;
       try {
         publisher = (EventPublisher<T>) EventPublisherManager.buildGcpLogPipelinePublisher(
             logCategoryName,
             EventLogMsgTBinarySerializer.getNewSerializer(),
-            GCP_CREDENTIALS_PATH);
+            gcpCredentialsPath);
       }
       catch (IOException e) {
         log.error("Failed to create scribe emitter for" + logCategoryName);

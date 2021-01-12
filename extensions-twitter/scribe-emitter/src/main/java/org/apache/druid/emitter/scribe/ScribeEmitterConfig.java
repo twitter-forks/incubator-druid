@@ -51,6 +51,12 @@ public class ScribeEmitterConfig
   @JsonProperty
   private final String clusterName;
 
+  @JsonProperty
+  private final String gcpOrgName;
+
+  @JsonProperty
+  private final String gcpCredentialsPath;
+
   @Override
   public boolean equals(Object o)
   {
@@ -90,6 +96,12 @@ public class ScribeEmitterConfig
     if (!getClusterName().equals(that.getClusterName())) {
       return false;
     }
+    if (!getGcpOrgName().equals(that.getGcpOrgName())) {
+      return false;
+    }
+    if (!getGcpCredentialsPath().equals(that.getGcpCredentialsPath())) {
+      return false;
+    }
     return true;
   }
 
@@ -105,6 +117,8 @@ public class ScribeEmitterConfig
     result = 31 * result + getDataCenter().hashCode();
     result = 31 * result + getDataCenterHost().hashCode();
     result = 31 * result + getClusterName().hashCode();
+    result = 31 * result + getGcpOrgName().hashCode();
+    result = 31 * result + getGcpCredentialsPath().hashCode();
     return result;
   }
 
@@ -118,7 +132,9 @@ public class ScribeEmitterConfig
       @JsonProperty("druidVersion") String druidVersion,
       @JsonProperty("dataCenter") String dataCenter,
       @JsonProperty("dataCenterHost") String dataCenterHost,
-      @JsonProperty("clusterName") String clusterName
+      @JsonProperty("clusterName") String clusterName,
+      @JsonProperty("gcpOrgName") String gcpOrgName,
+      @JsonProperty("gcpCredentialsPath") String gcpCredentialsPath
   )
   {
     this.requestLogScribeCategory = requestLogScribeCategory;
@@ -130,6 +146,8 @@ public class ScribeEmitterConfig
     this.dataCenter = dataCenter;
     this.dataCenterHost = dataCenterHost;
     this.clusterName = clusterName;
+    this.gcpOrgName = gcpOrgName;
+    this.gcpCredentialsPath = gcpCredentialsPath;
   }
 
   @JsonProperty
@@ -184,5 +202,17 @@ public class ScribeEmitterConfig
   public String getClusterName()
   {
     return clusterName;
+  }
+
+  @JsonProperty
+  public String getGcpOrgName()
+  {
+    return gcpOrgName;
+  }
+
+  @JsonProperty
+  public String getGcpCredentialsPath()
+  {
+    return gcpCredentialsPath;
   }
 }
