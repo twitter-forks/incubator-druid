@@ -34,6 +34,7 @@
   <properties>
     <thrift.version>0.10.0</thrift.version>
     <scala.version>2.10.6</scala.version>
+    <lpclientlib.version>20201218140047-HEAD-b0e9a71</lpclientlib.version>
   </properties>
 
   <dependencies>
@@ -125,7 +126,7 @@
     <dependency>
       <groupId>com.twitter.logpipeline.client</groupId>
       <artifactId>event-publisher-client-lib</artifactId>
-      <version>20201218140047-HEAD-b0e9a71</version>
+      <version>${lpclientlib.version}</version>
       <exclusions>
         <exclusion>
           <groupId>io.grpc</groupId>
@@ -136,6 +137,31 @@
           <artifactId>grpc-api</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.logpipeline.client.common</groupId>
+      <artifactId>event-publisher-core</artifactId>
+      <version>${lpclientlib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.logpipeline.client.serializers</groupId>
+      <artifactId>event-publisher-serializers</artifactId>
+      <version>${lpclientlib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.logpipeline.client.connectors</groupId>
+      <artifactId>logpipeline-connectors</artifactId>
+      <version>${lpclientlib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.logpipeline.client.utils</groupId>
+      <artifactId>event-publisher-utils</artifactId>
+      <version>${lpclientlib.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.logpipeline</groupId>
+      <artifactId>eventlog_msg_hdr-thrift</artifactId>
+      <version>${lpclientlib.version}</version>
     </dependency>
     <dependency>
       <groupId>io.grpc</groupId>
