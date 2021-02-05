@@ -20,6 +20,10 @@
 package org.apache.druid.emitter.scribe;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twitter.logpipeline.client.EventPublisherManager;
+import com.twitter.logpipeline.client.common.EventPublisher;
+import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
+import com.twitter.util.Await;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.junit.Assert;
 import org.junit.Test;
@@ -58,5 +62,10 @@ public class ScribeAdminLogEntryTest
         "datacenter: central-west\n" +
         "cluster_name: default-devel\n";
     Assert.assertEquals(expectedResult, scribeEntry.toString());
+
+    EventPublisher<DruidAdminLogEvent> publisher =
+        EventPublisherManager.buildInMemoryPublisher("test-topic",
+                                                     EventLogMsgTBinarySerializer.getNewSerializer(), 1024 * 1024);
+    Await.result(publisher.publish(scribeEntry.toThrift()));
   }
 }

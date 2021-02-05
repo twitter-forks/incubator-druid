@@ -33,8 +33,7 @@
 
   <properties>
     <thrift.version>0.10.0</thrift.version>
-    <scala.version>2.10.6</scala.version>
-    <lpclientlib.version>20201218140047-HEAD-b0e9a71</lpclientlib.version>
+    <lpclientlib.version>01282021-0003</lpclientlib.version>
   </properties>
 
   <dependencies>
@@ -107,25 +106,8 @@
       <version>${thrift.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>util-logging_2.10</artifactId>
-      <version>6.34.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.twitter.logpipeline.client</groupId>
-      <artifactId>event-publisher-client-lib</artifactId>
+      <artifactId>event-publisher-client-bundle</artifactId>
       <version>${lpclientlib.version}</version>
       <exclusions>
         <exclusion>
@@ -137,41 +119,6 @@
           <artifactId>grpc-api</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter.logpipeline.client.common</groupId>
-      <artifactId>event-publisher-core</artifactId>
-      <version>${lpclientlib.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter.logpipeline.client.serializers</groupId>
-      <artifactId>event-publisher-serializers</artifactId>
-      <version>${lpclientlib.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter.logpipeline.client.connectors</groupId>
-      <artifactId>logpipeline-connectors</artifactId>
-      <version>${lpclientlib.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter.logpipeline.client.utils</groupId>
-      <artifactId>event-publisher-utils</artifactId>
-      <version>${lpclientlib.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter.logpipeline</groupId>
-      <artifactId>eventlog_msg_hdr-thrift</artifactId>
-      <version>${lpclientlib.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-core</artifactId>
-      <version>1.28.1</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-api</artifactId>
-      <version>1.28.1</version>
     </dependency>
   </dependencies>
 

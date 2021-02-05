@@ -22,6 +22,10 @@ package org.apache.druid.emitter.scribe;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.twitter.logpipeline.client.EventPublisherManager;
+import com.twitter.logpipeline.client.common.EventPublisher;
+import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
+import com.twitter.util.Await;
 import org.apache.druid.java.util.common.DateTimes;
 import org.apache.druid.java.util.common.Intervals;
 import org.apache.druid.java.util.common.granularity.Granularities;
@@ -53,11 +57,14 @@ public class ScribeRequestLogEntryTest
           ImmutableList.of(),
           ImmutableList.of(),
           5,
-          ImmutableMap.of("implyDataCube", "testCube",
-                          "implyFeature", "feature",
-                          "implyUser", "user1",
-                          "implyUserEmail", "user1@company.com",
-                          "priority", 1)),
+          ImmutableMap.<String, Object>builder()
+              .put("implyDataCube", "testCube")
+              .put("implyFeature", "feature")
+              .put("implyUser", "user1")
+              .put("implyUserEmail", "user1@company.com")
+              .put("queryId", "tq1")
+              .put("priority", 1)
+              .build()),
         DateTimes.of(2019, 12, 12, 3, 1),
         "127.0.0.1",
         new QueryStats(ImmutableMap.of("query/time", 13L, "query/bytes", 10L, "success", true, "identity", "allowAll"))
@@ -67,7 +74,7 @@ public class ScribeRequestLogEntryTest
     ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log",
                                                                                                  "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
                                                                                                  "org-name", "/path/to/credentials"), objectMapper);
-    String expectedResult = "native_query_id: null\n" +
+    String expectedResult = "native_query_id: tq1\n" +
         "sql_query_id: null\n" +
         "role: iq\n" +
         "druid_version: 0.16.1-tw-0.1\n" +
@@ -94,6 +101,11 @@ public class ScribeRequestLogEntryTest
         "imply_view_title: null\n" +
         "imply_priority: 1\n";
     Assert.assertEquals(expectedResult, scribeEntry.toString());
+
+    EventPublisher<DruidQueryLogEvent> publisher =
+        EventPublisherManager.buildInMemoryPublisher("test-topic",
+                                                     EventLogMsgTBinarySerializer.getNewSerializer(), 1024 * 1024);
+    Await.result(publisher.publish(scribeEntry.toThrift()));
   }
 
   @Test
@@ -101,7 +113,7 @@ public class ScribeRequestLogEntryTest
   {
     RequestLogLine sqlLine = RequestLogLine.forSql(
         "SELECT * FROM table LIMIT 10",
-        ImmutableMap.of("", ""),
+        ImmutableMap.of("nativeQueryIds", "tq2"),
         DateTimes.of(2019, 12, 12, 3, 1),
         "127.0.0.1",
         new QueryStats(ImmutableMap.of("sqlQuery/time", 13L, "sqlQuery/bytes", 10L, "success", true, "identity", "allowAll"))
@@ -111,7 +123,7 @@ public class ScribeRequestLogEntryTest
     ScribeRequestLogEntry scribeEntry = new ScribeRequestLogEntry(event, new ScribeEmitterConfig("druid_query_log", "druid_admin_log", "druid_indexing_log",
                                                                                                  "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
                                                                                                  "org-name", "/path/to/credentials"), new ObjectMapper());
-    String expectedResult = "native_query_id: null\n" +
+    String expectedResult = "native_query_id: tq2\n" +
         "sql_query_id: null\n" +
         "role: iq\n" +
         "druid_version: 0.16.1-tw-0.1\n" +
@@ -138,5 +150,10 @@ public class ScribeRequestLogEntryTest
         "imply_view_title: null\n" +
         "imply_priority: 0\n";
     Assert.assertEquals(expectedResult, scribeEntry.toString());
+
+    EventPublisher<DruidQueryLogEvent> publisher =
+        EventPublisherManager.buildInMemoryPublisher("test-topic",
+                                                     EventLogMsgTBinarySerializer.getNewSerializer(), 1024 * 1024);
+    Await.result(publisher.publish(scribeEntry.toThrift()));
   }
 }
