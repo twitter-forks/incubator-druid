@@ -31,6 +31,7 @@ import org.apache.druid.data.input.parquet.simple.ParquetParseSpec;
 import org.apache.druid.initialization.DruidModule;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -71,6 +72,8 @@ public class ParquetExtensionsModule implements DruidModule
   {
     // this block of code is common among extensions that use Hadoop things but are not running in Hadoop, in order
     // to properly initialize everything
+
+    UserGroupInformation.setLoginUser(UserGroupInformation.createRemoteUser("user"));
 
     final Configuration conf = new Configuration();
 
