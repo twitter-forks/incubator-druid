@@ -692,18 +692,12 @@ public class ForkingTaskRunner
   @Override
   public Map<String, Long> getTotalTaskSlotCount()
   {
-    if (config.getPorts() != null && !config.getPorts().isEmpty()) {
-      return ImmutableMap.of(workerConfig.getCategory(), Long.valueOf(config.getPorts().size()));
-    }
-    return ImmutableMap.of(workerConfig.getCategory(), Long.valueOf(config.getEndPort() - config.getStartPort() + 1));
+    return ImmutableMap.of(workerConfig.getCategory(), getTotalTaskSlotCountLong());
   }
 
   public long getTotalTaskSlotCountLong()
   {
-    if (config.getPorts() != null && !config.getPorts().isEmpty()) {
-      return config.getPorts().size();
-    }
-    return config.getEndPort() - config.getStartPort() + 1;
+    return workerConfig.getCapacity();
   }
 
   @Override
