@@ -69,6 +69,10 @@ public class TwitterEventPublisher<T>
     EventLogMessage<T> message = EventLogMessage.buildEventLogMessage(publisher.getLogCategoryName(), thriftMessage);
     if (publisher != null) {
       Future<String> future = publisher.publish(message);
+      future.onFailure(ex -> {
+        log.info("Failed to scribe event for log category: " + publisher.getLogCategoryName() + ", Exception: " + ex);
+        return null;
+      });
       Await.result(future);
     }
   }
