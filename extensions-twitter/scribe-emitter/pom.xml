@@ -33,7 +33,7 @@
 
   <properties>
     <thrift.version>0.10.0</thrift.version>
-    <lpclientlib.version>07202021-0002</lpclientlib.version>
+    <lpclientlib.version>v1-07272021-0000</lpclientlib.version>
   </properties>
 
   <dependencies>
@@ -108,7 +108,7 @@
     <dependency>
       <groupId>com.twitter.logpipeline.client</groupId>
       <artifactId>event-publisher-client-bundle</artifactId>
-      <classifier>shaded6</classifier>
+      <classifier>shaded</classifier>
       <version>${lpclientlib.version}</version>
       <exclusions>
         <exclusion>
