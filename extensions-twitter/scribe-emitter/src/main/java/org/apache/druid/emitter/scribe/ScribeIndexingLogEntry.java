@@ -22,7 +22,6 @@ package org.apache.druid.emitter.scribe;
 import org.apache.druid.java.util.emitter.core.Event;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.apache.druid.query.DruidMetrics;
-import org.apache.thrift.TBase;
 
 public class ScribeIndexingLogEntry
 {
@@ -59,7 +58,7 @@ public class ScribeIndexingLogEntry
     this.cluster_name = config.getClusterName();
   }
 
-  public TBase toThrift()
+  public DruidIndexingLogEvent toThrift()
   {
     DruidIndexingLogEvent thriftEvent = new DruidIndexingLogEvent();
     thriftEvent.setTask_id(task_id);

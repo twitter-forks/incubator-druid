@@ -46,7 +46,16 @@ public class ScribeEmitterConfig
   private final String dataCenter;
 
   @JsonProperty
+  private final String dataCenterHost;
+
+  @JsonProperty
   private final String clusterName;
+
+  @JsonProperty
+  private final String gcpOrgName;
+
+  @JsonProperty
+  private final String gcpCredentialsPath;
 
   @Override
   public boolean equals(Object o)
@@ -81,7 +90,16 @@ public class ScribeEmitterConfig
     if (!getDataCenter().equals(that.getDataCenter())) {
       return false;
     }
+    if (!getDataCenterHost().equals(that.getDataCenterHost())) {
+      return false;
+    }
     if (!getClusterName().equals(that.getClusterName())) {
+      return false;
+    }
+    if (!getGcpOrgName().equals(that.getGcpOrgName())) {
+      return false;
+    }
+    if (!getGcpCredentialsPath().equals(that.getGcpCredentialsPath())) {
       return false;
     }
     return true;
@@ -97,7 +115,10 @@ public class ScribeEmitterConfig
     result = 31 * result + getEnvironment().hashCode();
     result = 31 * result + getDruidVersion().hashCode();
     result = 31 * result + getDataCenter().hashCode();
+    result = 31 * result + getDataCenterHost().hashCode();
     result = 31 * result + getClusterName().hashCode();
+    result = 31 * result + getGcpOrgName().hashCode();
+    result = 31 * result + getGcpCredentialsPath().hashCode();
     return result;
   }
 
@@ -110,7 +131,10 @@ public class ScribeEmitterConfig
       @JsonProperty("environment") String environment,
       @JsonProperty("druidVersion") String druidVersion,
       @JsonProperty("dataCenter") String dataCenter,
-      @JsonProperty("clusterName") String clusterName
+      @JsonProperty("dataCenterHost") String dataCenterHost,
+      @JsonProperty("clusterName") String clusterName,
+      @JsonProperty("gcpOrgName") String gcpOrgName,
+      @JsonProperty("gcpCredentialsPath") String gcpCredentialsPath
   )
   {
     this.requestLogScribeCategory = requestLogScribeCategory;
@@ -120,7 +144,10 @@ public class ScribeEmitterConfig
     this.environment = environment;
     this.druidVersion = druidVersion;
     this.dataCenter = dataCenter;
+    this.dataCenterHost = dataCenterHost;
     this.clusterName = clusterName;
+    this.gcpOrgName = gcpOrgName;
+    this.gcpCredentialsPath = gcpCredentialsPath;
   }
 
   @JsonProperty
@@ -166,8 +193,26 @@ public class ScribeEmitterConfig
   }
 
   @JsonProperty
+  public String getDataCenterHost()
+  {
+    return dataCenterHost;
+  }
+
+  @JsonProperty
   public String getClusterName()
   {
     return clusterName;
+  }
+
+  @JsonProperty
+  public String getGcpOrgName()
+  {
+    return gcpOrgName;
+  }
+
+  @JsonProperty
+  public String getGcpCredentialsPath()
+  {
+    return gcpCredentialsPath;
   }
 }
