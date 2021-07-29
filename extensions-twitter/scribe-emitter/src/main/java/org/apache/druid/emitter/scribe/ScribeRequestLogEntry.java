@@ -29,7 +29,6 @@ import org.apache.druid.query.QueryDataSource;
 import org.apache.druid.query.TableDataSource;
 import org.apache.druid.query.UnionDataSource;
 import org.apache.druid.server.log.DefaultRequestLogEvent;
-import org.apache.thrift.TBase;
 import java.util.stream.Collectors;
 
 public class ScribeRequestLogEntry
@@ -123,7 +122,7 @@ public class ScribeRequestLogEntry
     this.host = requestLogEvent.getHost();
   }
 
-  public TBase toThrift()
+  public DruidQueryLogEvent toThrift()
   {
     DruidQueryLogEvent thriftEvent = new DruidQueryLogEvent();
 
