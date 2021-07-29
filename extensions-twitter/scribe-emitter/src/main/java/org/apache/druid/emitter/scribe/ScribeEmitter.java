@@ -31,7 +31,7 @@ public class ScribeEmitter implements Emitter
 {
   private static final String ADMIN_CONFIG = "config/audit";
   private static final String INDEXING_CONFIG = "task/run/time";
-  private static final String GCP = "gcp";
+  private static final String GOOGLE_CLOUD_PLATFORM = "gcp";
 
   private ObjectMapper jsonMapper;
 
@@ -105,6 +105,6 @@ public class ScribeEmitter implements Emitter
 
   private boolean isDatacenterHostGCP(String datacenterHost)
   {
-    return datacenterHost.compareTo(GCP) == 0;
+    return datacenterHost.equals(GOOGLE_CLOUD_PLATFORM);
   }
 }
