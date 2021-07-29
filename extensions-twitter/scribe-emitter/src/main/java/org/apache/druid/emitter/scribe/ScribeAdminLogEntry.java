@@ -23,7 +23,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.druid.java.util.emitter.core.Event;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
-import org.apache.thrift.TBase;
 
 public class ScribeAdminLogEntry
 {
@@ -68,7 +67,7 @@ public class ScribeAdminLogEntry
     this.cluster_name = config.getClusterName();
   }
 
-  public TBase toThrift()
+  public DruidAdminLogEvent toThrift()
   {
     DruidAdminLogEvent thriftEvent = new DruidAdminLogEvent();
     thriftEvent.setAudit_key(audit_key);
