@@ -19,6 +19,10 @@
 
 package org.apache.druid.emitter.scribe;
 
+import com.twitter.logpipeline.client.EventPublisherManager;
+import com.twitter.logpipeline.client.common.EventPublisher;
+import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
+import com.twitter.util.Await;
 import org.apache.druid.java.util.common.DateTimes;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.apache.druid.query.DruidMetrics;
@@ -29,7 +33,7 @@ import org.junit.Test;
 public class ScribeIndexingLogEntryTest
 {
   @Test
-  public void testIndexingLogEntry()
+  public void testIndexingLogEntry() throws Exception
   {
     DateTime now = DateTimes.nowUtc();
     ScribeIndexingLogEntry scribeEntry = new ScribeIndexingLogEntry(new ServiceMetricEvent.Builder()
@@ -44,7 +48,8 @@ public class ScribeIndexingLogEntryTest
                                                                                            "druid_indexing_log",
                                                                                                              "iq", "test",
                                                                                                       "0.16.1-tw-0.1", "central-west",
-                                                                                                      "default-devel"));
+                                                                                            "onprem", "default-devel",
+                                                                                            "org-name", "/path/to/credentials"));
     String expectedResult = "task_id: index_kafka_dsname\n" +
         "task_type: index_kafka\n" +
         "datasource: dsname\n" +
@@ -58,5 +63,10 @@ public class ScribeIndexingLogEntryTest
         "datacenter: central-west\n" +
         "cluster_name: default-devel\n";
     Assert.assertEquals(expectedResult, scribeEntry.toString());
+
+    EventPublisher<DruidIndexingLogEvent> publisher =
+        EventPublisherManager.buildInMemoryPublisher("test-topic",
+                                                     EventLogMsgTBinarySerializer.getNewSerializer(), 1024 * 1024);
+    Await.result(publisher.publish(scribeEntry.toThrift()));
   }
 }

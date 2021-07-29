@@ -20,6 +20,10 @@
 package org.apache.druid.emitter.scribe;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twitter.logpipeline.client.EventPublisherManager;
+import com.twitter.logpipeline.client.common.EventPublisher;
+import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
+import com.twitter.util.Await;
 import org.apache.druid.java.util.emitter.service.ServiceMetricEvent;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +46,8 @@ public class ScribeAdminLogEntryTest
                                                                   .build("config/audit", 1)
                                                                   .build("druid/coordinator", "127.0.0.11"),
                                                               new ScribeEmitterConfig("druid_request_log", "druid_admin_log", "druid_indexing_log",
-                                                                                      "iq", "test", "0.16.1-tw-0.1", "central-west", "default-devel"),
+                                                                                      "iq", "test", "0.16.1-tw-0.1", "central-west", "onprem", "default-devel",
+                                                                                      "org-name", "/path/to/credentials"),
                                                               objectMapper);
     String expectedResult = "audit_key: key1\n" +
         "audit_type: rules\n" +
@@ -57,5 +62,10 @@ public class ScribeAdminLogEntryTest
         "datacenter: central-west\n" +
         "cluster_name: default-devel\n";
     Assert.assertEquals(expectedResult, scribeEntry.toString());
+
+    EventPublisher<DruidAdminLogEvent> publisher =
+        EventPublisherManager.buildInMemoryPublisher("test-topic",
+                                                     EventLogMsgTBinarySerializer.getNewSerializer(), 1024 * 1024);
+    Await.result(publisher.publish(scribeEntry.toThrift()));
   }
 }
