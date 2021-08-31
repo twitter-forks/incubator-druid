@@ -105,6 +105,6 @@ public class ScribeEmitter implements Emitter
 
   private boolean isDatacenterHostGCP(String datacenterHost)
   {
-    return datacenterHost.equals(GOOGLE_CLOUD_PLATFORM);
+    return GOOGLE_CLOUD_PLATFORM.equals(datacenterHost);
   }
 }
