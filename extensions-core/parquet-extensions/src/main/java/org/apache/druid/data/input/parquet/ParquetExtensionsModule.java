@@ -73,7 +73,9 @@ public class ParquetExtensionsModule implements DruidModule
     // this block of code is common among extensions that use Hadoop things but are not running in Hadoop, in order
     // to properly initialize everything
 
-    UserGroupInformation.setLoginUser(UserGroupInformation.createRemoteUser("user"));
+    if (System.getProperty("user.name") == null || System.getProperty("user.name").equals("?")) {
+      UserGroupInformation.setLoginUser(UserGroupInformation.createRemoteUser("user"));
+    }
 
     final Configuration conf = new Configuration();
 
