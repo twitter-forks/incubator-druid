@@ -23,7 +23,6 @@ import com.twitter.logpipeline.client.EventPublisherManager;
 import com.twitter.logpipeline.client.common.EventLogMessage;
 import com.twitter.logpipeline.client.common.EventPublisher;
 import com.twitter.logpipeline.client.serializers.EventLogMsgTBinarySerializer;
-import com.twitter.util.Await;
 import com.twitter.util.Future;
 import org.apache.druid.java.util.common.logger.Logger;
 
@@ -73,7 +72,6 @@ public class TwitterEventPublisher<T>
         log.info("Failed to scribe event for log category: " + publisher.getLogCategoryName() + ", Exception: " + ex);
         return null;
       });
-      Await.result(future);
     }
   }
 }
