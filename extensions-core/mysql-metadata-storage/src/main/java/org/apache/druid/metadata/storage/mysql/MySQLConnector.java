@@ -23,7 +23,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
-import com.mysql.jdbc.exceptions.MySQLTransientException;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.druid.java.util.common.ISE;
 import org.apache.druid.java.util.common.StringUtils;
@@ -37,6 +36,7 @@ import org.skife.jdbi.v2.util.StringMapper;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.sql.SQLTransientException;
 
 public class MySQLConnector extends SQLMetadataConnector
 {
@@ -64,7 +64,7 @@ public class MySQLConnector extends SQLMetadataConnector
     catch (ClassNotFoundException e) {
       throw new ISE(e, "Could not find %s on the classpath. The MySQL Connector library is not included in the Druid "
                    + "distribution but is required to use MySQL. Please download a compatible library (for example "
-                   + "'mysql-connector-java-5.1.48.jar') and place it under 'extensions/mysql-metadata-storage/'. See "
+                   + "'mysql-connector-java-8.2.0.jar') and place it under 'extensions/mysql-metadata-storage/'. See "
                    + "https://druid.apache.org/downloads for more details.",
                     driverConfig.getDriverClassName()
       );
@@ -205,7 +205,7 @@ public class MySQLConnector extends SQLMetadataConnector
   @Override
   protected boolean connectorIsTransientException(Throwable e)
   {
-    return e instanceof MySQLTransientException
+    return e instanceof SQLTransientException
            || (e instanceof SQLException && ((SQLException) e).getErrorCode() == 1317 /* ER_QUERY_INTERRUPTED */);
   }
 
