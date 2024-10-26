@@ -70,4 +70,7 @@
   <suppress checks="ImportOrder" files="[\\/]target[\\/]generated-test-sources[\\/]" />
   <suppress checks="EmptyLineSeparator" files="[\\/]target[\\/]generated-test-sources[\\/]" />
   <suppress checks="AvoidStaticImport" files="[\\/]src[\\/](test)[\\/]"/>
+  <suppress checks=".*" files="extensions-twitter/scribe-emitter/src/main/java/org/apache/druid/emitter/scribe/DruidAdminLogEvent.java"/>
+  <suppress checks=".*" files="extensions-twitter/scribe-emitter/src/main/java/org/apache/druid/emitter/scribe/DruidIndexingLogEvent.java"/>
+  <suppress checks=".*" files="extensions-twitter/scribe-emitter/src/main/java/org/apache/druid/emitter/scribe/DruidQueryLogEvent.java"/>
 </suppressions>
